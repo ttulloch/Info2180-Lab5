@@ -7,17 +7,13 @@ $password = 'password123';
 $dbname = 'world';
 
 try {
-    // Create a new PDO instance with error mode set to Exception
     $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Check if 'country' parameter is set and not empty
     if (isset($_GET['country']) && $_GET['country'] != '') {
         $search = $_GET['country'];
         $lookup = isset($_GET['lookup']) ? $_GET['lookup'] : 'country';
 
         if ($lookup === 'country') {
-            // Prepare SQL for country lookup by country name, by capital city name, or any city within the country
             $stmt = $conn->prepare("
                 SELECT DISTINCT countries.name, countries.continent, countries.independence_year, countries.head_of_state 
                 FROM countries 
@@ -30,7 +26,6 @@ try {
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if (count($results) > 0) {
-                // Output results as an HTML table for country or capital
                 echo '<table border="1">';
                 echo '<thead>';
                 echo '<tr>';
@@ -58,7 +53,6 @@ try {
             }
 
         } elseif ($lookup === 'cities') {
-            // Prepare SQL for city lookup by country name or by city name
             $stmt = $conn->prepare("
                 SELECT cities.name, cities.district, cities.population 
                 FROM cities 
@@ -71,7 +65,6 @@ try {
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if (count($results) > 0) {
-                // Output results as an HTML table for cities
                 echo '<table border="1">';
                 echo '<thead>';
                 echo '<tr>';

@@ -4,27 +4,25 @@
     <meta charset="utf-8">
     <title>World Database Lookup</title>
 
-    <!-- Link to CSS file -->
     <link href="world.css" type="text/css" rel="stylesheet" />
 
-    <!-- Link to JavaScript file -->
     <script src="world.js" type="text/javascript"></script>
 </head>
 <body>
     <header>
-        <h1>World Database Lookup</h1>
+        <h1>
+            <img src="world-icon.png" alt="World Icon" class="header-icon">
+            World Database Lookup
+        </h1>
     </header>
-
     <main>
         <div id="controls">
             <label for="country">Country:</label>
-            <input id="country" type="search" name="country" placeholder="Enter country/City name" />
+            <input id="country" type="search" name="country" placeholder="Enter country name" />
             <button id="lookup-country">Lookup Country</button>
             <button id="lookup-cities">Lookup Cities</button>
         </div>
-
         <div id="result">
-            <!-- Results will appear here -->
         </div>
     </main>
 </body>
