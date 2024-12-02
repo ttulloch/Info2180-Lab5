@@ -1,30 +1,43 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Listen for clicks on the button with id of 'lookup'
-    const lookupButton = document.getElementById('lookup');
+    const lookupCountryButton = document.getElementById('lookup-country');
+    const lookupCitiesButton = document.getElementById('lookup-cities');
     const resultDiv = document.getElementById('result');
 
-    lookupButton.addEventListener('click', function() {
+
+    function makeRequest(lookupType) {
         const country = document.getElementById('country').value.trim();
 
-        // Create a new XMLHttpRequest object
+        if (country === '') {
+            resultDiv.innerHTML = '<p>Please enter a country name.</p>';
+            return;
+        }
+
+
         const xhr = new XMLHttpRequest();
+        const url = 'world.php?country=' + encodeURIComponent(country) + '&lookup=' + lookupType;
 
-        // Fetch the data by opening an Ajax connection to fetch data from world.php
-        xhr.open('GET', 'world.php?country=' + encodeURIComponent(country), true);
+        xhr.open('GET', url, true);
 
-        // Set up a function to handle the response data
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    // Print the data you have obtained from the AJAX request into the div with id "result"
-                    resultDiv.innerHTML = '<ul>' + xhr.responseText + '</ul>';
+                    resultDiv.innerHTML = xhr.responseText;
                 } else {
                     resultDiv.innerHTML = '<p>Error fetching data.</p>';
                 }
             }
         };
 
-        // Send the request
         xhr.send();
+    }
+
+
+    lookupCountryButton.addEventListener('click', function() {
+        makeRequest('country');
+    });
+
+
+    lookupCitiesButton.addEventListener('click', function() {
+        makeRequest('cities');
     });
 });
