@@ -1,5 +1,4 @@
 <?php
-// Set the content type to HTML with UTF-8 encoding
 header("Content-Type: text/html; charset=UTF-8");
 
 $host = 'localhost';
@@ -18,7 +17,7 @@ try {
         $country = $_GET['country'];
 
         // Prepare the SQL statement with a placeholder
-        $stmt = $conn->prepare("SELECT * FROM countries WHERE name LIKE :country");
+        $stmt = $conn->prepare("SELECT name, continent, independence_year, head_of_state FROM countries WHERE name LIKE :country");
         $stmt->bindValue(':country', '%' . $country . '%', PDO::PARAM_STR);
 
         // Execute the prepared statement
@@ -28,21 +27,40 @@ try {
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (count($results) > 0) {
-            // Output results as HTML list items
+            // Output results as an HTML table
+            echo '<table border="1">';
+            echo '<thead>';
+            echo '<tr>';
+            echo '<th>Name</th>';
+            echo '<th>Continent</th>';
+            echo '<th>Independence Year</th>';
+            echo '<th>Head of State</th>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+
             foreach ($results as $row) {
-                echo '<li>' . htmlspecialchars($row['name']) . ' is ruled by ' . htmlspecialchars($row['head_of_state']) . '</li>';
+                echo '<tr>';
+                echo '<td>' . htmlspecialchars($row['name']) . '</td>';
+                echo '<td>' . htmlspecialchars($row['continent']) . '</td>';
+                echo '<td>' . htmlspecialchars($row['independence_year'] ?? 'N/A') . '</td>';
+                echo '<td>' . htmlspecialchars($row['head_of_state'] ?? 'N/A') . '</td>';
+                echo '</tr>';
             }
+
+            echo '</tbody>';
+            echo '</table>';
         } else {
             // No results found
-            echo '<li>No results found for "' . htmlspecialchars($country) . '".</li>';
+            echo '<p>No results found for "' . htmlspecialchars($country) . '".</p>';
         }
     } else {
         // 'country' parameter is not provided or empty
-        echo '<li>Please enter a country name.</li>';
+        echo '<p>Please enter a country name.</p>';
     }
 } catch (PDOException $e) {
     // Handle any database connection or query errors
-    echo '<li>Error: ' . htmlspecialchars($e->getMessage()) . '</li>';
+    echo '<p>Error: ' . htmlspecialchars($e->getMessage()) . '</p>';
     exit();
 }
 ?>
